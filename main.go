@@ -23,7 +23,7 @@ func init() {
 	util.Setup()
 }
 
-// @title Golang Gin API
+// @title Golang Gin API test
 // @version 1.0
 // @description An example of gin
 // @termsOfService https://github.com/EDDYCJY/go-gin-example
