@@ -11,17 +11,7 @@ type App struct {
 	JwtSecret string
 	PageSize  int
 	PrefixUrl string
-
 	RuntimeRootPath string
-
-	ImageSavePath  string
-	ImageMaxSize   int
-	ImageAllowExts []string
-
-	ExportSavePath string
-	QrCodeSavePath string
-	FontSavePath   string
-
 	LogSavePath string
 	LogSaveName string
 	LogFileExt  string
@@ -61,11 +51,10 @@ type Redis struct {
 var RedisSetting = &Redis{}
 
 var cfg *ini.File
-
 // Setup initialize the configuration instance
 func Setup() {
 	var err error
-	cfg, err = ini.Load("conf/app.ini")
+	cfg, err = ini.Load(".env")
 	if err != nil {
 		log.Fatalf("setting.Setup, fail to parse 'conf/app.ini': %v", err)
 	}
@@ -75,7 +64,9 @@ func Setup() {
 	mapTo("database", DatabaseSetting)
 	mapTo("redis", RedisSetting)
 
-	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
+
+
+    //lib.P(DatabaseSetting,lib.StructToMap(cfg.Section("databases")),cfg.Section("databases"))
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
 	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second

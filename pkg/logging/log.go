@@ -31,7 +31,7 @@ const (
 )
 
 // Setup initialize the log instance
-func Setup() {
+func InitLog() {
 	var err error
 	filePath := getLogFilePath()
 	fileName := getLogFileName()
