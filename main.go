@@ -5,7 +5,7 @@ import (
 	"github.com/EDDYCJY/go-gin-example/controllers"
 	"github.com/EDDYCJY/go-gin-example/pkg/initconfig"
 	"github.com/EDDYCJY/go-gin-example/pkg/initstart"
-	"github.com/EDDYCJY/go-gin-example/pkg/logging"
+	"github.com/EDDYCJY/go-gin-example/pkg/librarys"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -17,7 +17,7 @@ func init() {
 	initstart.InitMysqlTestDb()
 	new(initstart.RedisPool).InitRedisDb()
 	new(initstart.ElasticSearch).InitDefaultEs()
-	logging.InitLog()
+	librarys.InitLog()
 }
 
 // @title Golang Gin API test

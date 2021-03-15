@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/EDDYCJY/go-gin-example/models"
 	lib "github.com/EDDYCJY/go-gin-example/pkg/librarys"
-	"github.com/EDDYCJY/go-gin-example/pkg/logging"
 	"github.com/gin-gonic/gin"
 )
 
@@ -36,7 +35,7 @@ func DemoTest(c *gin.Context) {
 
 	funcName := c.Query("funcName")
 	if funcName == "log"{
-		logging.LogInfo(11,"log 33311",scoreMap)
+		lib.LogInfo(11,"log 33311",scoreMap)
 		c.JSON(200, gin.H{
 			"message": "log",
 		})
