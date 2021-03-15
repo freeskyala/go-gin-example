@@ -1,7 +1,13 @@
+GET http://127.0.0.1:8011/api/demoTest?funcName=log
+Accept: application/json
+##  elastic test tagmodel redis log
+
+###
 GET http://127.0.0.1:8011/api/tagIndex?name=222
 Accept: application/json
 
-###
+
 ###
 GET http://127.0.0.1:8011/api/demoTest?name=222
 Accept: application/json
+

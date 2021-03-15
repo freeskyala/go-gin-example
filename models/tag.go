@@ -2,7 +2,6 @@ package models
 
 import (
 	global "github.com/EDDYCJY/go-gin-example/pkg"
-	lib "github.com/EDDYCJY/go-gin-example/pkg/librarys"
 	"github.com/jinzhu/gorm"
 )
 
@@ -59,7 +58,7 @@ func GetTags(pageNum int, pageSize int, maps interface{}) ([]Tag, error) {
 	} else {
 		err = global.TEST_DB.Where(maps).Find(&tags).Error
 	}
-	lib.P(3333,tags,global.TEST_DB,global.VAFFLE_DB)
+	//lib.P(3333,tags,global.TEST_DB,global.VAFFLE_DB)
 
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err

@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/EDDYCJY/go-gin-example/models"
-	"github.com/EDDYCJY/go-gin-example/pkg/gredis"
 	lib "github.com/EDDYCJY/go-gin-example/pkg/librarys"
 	"github.com/EDDYCJY/go-gin-example/pkg/logging"
 	"github.com/gin-gonic/gin"
@@ -15,7 +15,6 @@ type Tag struct {
 	CreatedBy  string
 	ModifiedBy string
 	State      int
-
 	PageNum  int
 	PageSize int
 }
@@ -30,10 +29,55 @@ func DemoTest(c *gin.Context) {
 	//response := lib.Gin{C: c}
 
 	scoreMap := make(map[string]interface{})
-	scoreMap["张三"] = 90
-	scoreMap["小明"] = 100
-	scoreMap["娜扎"] = 60
-	logging.Info(11,22,scoreMap)
+	scoreMap["user"] = 90
+	scoreMap["test"] = 100
+	scoreMap["fff"] = 60
+
+
+	funcName := c.Query("funcName")
+	if funcName == "log"{
+		logging.LogInfo(11,"log 33311",scoreMap)
+		c.JSON(200, gin.H{
+			"message": "log",
+		})
+		return
+	}
+	if funcName == "elastic"{
+		esClient := new(lib.EsClientHandler)
+		updateMap := make(map[string]interface{})
+		updateMap["challenge_item"] = 90
+		esClient.EsClientUpdateById("90856","vaffle-posts","posts",updateMap)
+		result:= esClient.EsClientGetInfoById("90856","vaffle-posts","posts")
+		lib.ResponseJson(c,200,result,"")
+		return
+	}
+	if funcName == "test"{
+		c.JSON(200, gin.H{
+			"message": "demoTest",
+		})
+		return
+	}
+
+	if funcName == "tagmodel"{
+		maps := make(map[string]interface{})
+		maps["deleted_on"] = 0
+		tags, _ := models.GetTags(1, 1, maps)
+		lib.ResponseJson(c,200,tags,"")
+		return
+	}
+
+	if funcName == "redis"{
+		redisClient := new(lib.RedisClientHandler)
+		stringCache,_:= json.Marshal(scoreMap)
+		redisClient.RedisSelect(1).RedisSet("goin3",stringCache)
+		cache := redisClient.RedisSelect(1).RedisGet("goin3")
+		scoreMap2 := make(map[string]interface{})
+		json.Unmarshal([]byte(cache), &scoreMap2)
+		lib.ResponseJson(c,200,scoreMap2,"redis")
+	}
+
+
+
 	//logging.Info(11,22,global.VAFFLE_DB)
 	/*
 	lib.P(global.VAFFLE_DB)
@@ -45,20 +89,8 @@ func DemoTest(c *gin.Context) {
 	global.VAFFLE_DB.Where("id in (?)", ids).Find(&data)
 
 	 */
-	maps := make(map[string]interface{})
-	maps["deleted_on"] = 0
 
 
-	//tags, _ := models.DemoTest(1, 1, maps)
-	tags, _ := models.GetTags(1, 1, maps)
-	//lib.P(tags)
-	lib.ResponseJson(c,200,tags,"")
-	//response.Response(200, 200, scoreMap)
-	return
-	gredis.Set("test2", scoreMap, 3600)
-	lib.Pmap(scoreMap)
-	lib.P(222,scoreMap)
-	c.JSON(200, gin.H{
-		"message": "demoTest",
-	})
+
+
 }

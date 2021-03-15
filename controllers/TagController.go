@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/EDDYCJY/go-gin-example/logics"
 	lib "github.com/EDDYCJY/go-gin-example/pkg/librarys"
-	"github.com/EDDYCJY/go-gin-example/pkg/setting"
-	"github.com/EDDYCJY/go-gin-example/pkg/util"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
 )
@@ -29,8 +27,6 @@ func TagIndex(c *gin.Context) {
 	tagService := TagLogic.Tag{
 		Name:     name,
 		State:    state,
-		PageNum:  util.GetPage(c),
-		PageSize: setting.AppSetting.PageSize,
 	}
 	tags, err := tagService.GetAll()
 	if err != nil {

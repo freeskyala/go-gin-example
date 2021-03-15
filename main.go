@@ -3,25 +3,21 @@ package main
 import (
 	"fmt"
 	"github.com/EDDYCJY/go-gin-example/controllers"
-	"github.com/EDDYCJY/go-gin-example/pkg/gredis"
 	"github.com/EDDYCJY/go-gin-example/pkg/initconfig"
 	"github.com/EDDYCJY/go-gin-example/pkg/initstart"
 	"github.com/EDDYCJY/go-gin-example/pkg/logging"
-	"github.com/EDDYCJY/go-gin-example/pkg/setting"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 )
 
 func init() {
-	setting.Setup()
+	//setting.Setup()
 	initconfig.InitConfig()
 	initstart.InitMysqlTestDb()
-
+	new(initstart.RedisPool).InitRedisDb()
+	new(initstart.ElasticSearch).InitDefaultEs()
 	logging.InitLog()
-	gredis.Setup()
-	//util.Setup()
-	//new(container.MysqlPool).Start()
 }
 
 // @title Golang Gin API test
@@ -31,11 +27,12 @@ func init() {
 // @license.name MIT
 // @license.url https://github.com/EDDYCJY/go-gin-example/blob/master/LICENSE
 func main() {
-	gin.SetMode(setting.ServerSetting.RunMode)
+	gin.SetMode(initconfig.ServerConfig.RunMode)
 	routersInit := controllers.InitRouter()
-	readTimeout := setting.ServerSetting.ReadTimeout
-	writeTimeout := setting.ServerSetting.WriteTimeout
-	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
+	readTimeout := initconfig.ServerConfig.ReadTimeout
+	//lib.P(readTimeout,initconfig.ServerConfig.ReadTimeout)
+	writeTimeout := initconfig.ServerConfig.WriteTimeout
+	endPoint := fmt.Sprintf(":%d", initconfig.ServerConfig.HttpPort)
 	maxHeaderBytes := 1 << 20
 
 	server := &http.Server{

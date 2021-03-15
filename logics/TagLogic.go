@@ -1,11 +1,7 @@
 package TagLogic
 
 import (
-	"encoding/json"
 	"github.com/EDDYCJY/go-gin-example/models"
-	"github.com/EDDYCJY/go-gin-example/pkg/gredis"
-	"github.com/EDDYCJY/go-gin-example/pkg/logging"
-	"github.com/EDDYCJY/go-gin-example/logics/cache_service"
 )
 
 type Tag struct {
@@ -15,8 +11,6 @@ type Tag struct {
 	ModifiedBy string
 	State      int
 
-	PageNum  int
-	PageSize int
 }
 
 func (t *Tag) ExistByName() (bool, error) {
@@ -51,32 +45,10 @@ func (t *Tag) Count() (int, error) {
 }
 
 func (t *Tag) GetAll() ([]models.Tag, error) {
-	var (
-		tags, cacheTags []models.Tag
-	)
-
-	cache := cache_service.Tag{
-		State: t.State,
-		PageNum:  t.PageNum,
-		PageSize: t.PageSize,
-	}
-	key := cache.GetTagsKey()
-	if gredis.Exists(key) {
-		data, err := gredis.Get(key)
-		if err != nil {
-			logging.Info(err)
-		} else {
-			json.Unmarshal(data, &cacheTags)
-			return cacheTags, nil
-		}
-	}
-
-	tags, err := models.GetTags(t.PageNum, t.PageSize, t.GetWhere())
+	tags, err := models.GetTags(1, 1, t.GetWhere())
 	if err != nil {
 		return nil, err
 	}
-
-	gredis.Set(key, tags, 3600)
 	return tags, nil
 }
 
