@@ -1,7 +1,7 @@
 package models
 
 import (
-	global "github.com/EDDYCJY/go-gin-example/pkg"
+	global2 "github.com/EDDYCJY/go-gin-example/pkg/global"
 	"github.com/jinzhu/gorm"
 )
 
@@ -20,7 +20,7 @@ func (t *Tag) TableName() string {
 // ExistTagByName checks if there is a tag with the same name
 func ExistTagByName(name string) (bool, error) {
 	var tag Tag
-	err := global.TEST_DB.Select("id").Where("name = ? AND deleted_on = ? ", name, 0).First(&tag).Error
+	err := global2.TEST_DB.Select("id").Where("name = ? AND deleted_on = ? ", name, 0).First(&tag).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}
@@ -39,7 +39,7 @@ func AddTag(name string, state int, createdBy string) error {
 		State:     state,
 		CreatedBy: createdBy,
 	}
-	if err := global.TEST_DB.Create(&tag).Error; err != nil {
+	if err := global2.TEST_DB.Create(&tag).Error; err != nil {
 		return err
 	}
 
@@ -54,9 +54,9 @@ func GetTags(pageNum int, pageSize int, maps interface{}) ([]Tag, error) {
 	)
 
 	if pageSize > 0 && pageNum > 0 {
-		err = global.TEST_DB.Where(maps).Find(&tags).Offset(pageNum).Limit(pageSize).Error
+		err = global2.TEST_DB.Where(maps).Find(&tags).Offset(pageNum).Limit(pageSize).Error
 	} else {
-		err = global.TEST_DB.Where(maps).Find(&tags).Error
+		err = global2.TEST_DB.Where(maps).Find(&tags).Error
 	}
 	//lib.P(3333,tags,global.TEST_DB,global.VAFFLE_DB)
 
@@ -70,7 +70,7 @@ func GetTags(pageNum int, pageSize int, maps interface{}) ([]Tag, error) {
 // GetTagTotal counts the total number of tags based on the constraint
 func GetTagTotal(maps interface{}) (int, error) {
 	var count int
-	if err := global.TEST_DB.Model(&Tag{}).Where(maps).Count(&count).Error; err != nil {
+	if err := global2.TEST_DB.Model(&Tag{}).Where(maps).Count(&count).Error; err != nil {
 		return 0, err
 	}
 
@@ -80,7 +80,7 @@ func GetTagTotal(maps interface{}) (int, error) {
 // ExistTagByID determines whether a Tag exists based on the ID
 func ExistTagByID(id int) (bool, error) {
 	var tag Tag
-	err := global.TEST_DB.Select("id").Where("id = ? AND deleted_on = ? ", id, 0).First(&tag).Error
+	err := global2.TEST_DB.Select("id").Where("id = ? AND deleted_on = ? ", id, 0).First(&tag).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}
@@ -93,7 +93,7 @@ func ExistTagByID(id int) (bool, error) {
 
 // DeleteTag delete a tag
 func DeleteTag(id int) error {
-	if err := global.TEST_DB.Where("id = ?", id).Delete(&Tag{}).Error; err != nil {
+	if err := global2.TEST_DB.Where("id = ?", id).Delete(&Tag{}).Error; err != nil {
 		return err
 	}
 
@@ -102,7 +102,7 @@ func DeleteTag(id int) error {
 
 // EditTag modify a single tag
 func EditTag(id int, data interface{}) error {
-	if err := global.TEST_DB.Model(&Tag{}).Where("id = ? AND deleted_on = ? ", id, 0).Updates(data).Error; err != nil {
+	if err := global2.TEST_DB.Model(&Tag{}).Where("id = ? AND deleted_on = ? ", id, 0).Updates(data).Error; err != nil {
 		return err
 	}
 
@@ -111,7 +111,7 @@ func EditTag(id int, data interface{}) error {
 
 // CleanAllTag clear all tag
 func CleanAllTag() (bool, error) {
-	if err := global.TEST_DB.Unscoped().Where("deleted_on != ? ", 0).Delete(&Tag{}).Error; err != nil {
+	if err := global2.TEST_DB.Unscoped().Where("deleted_on != ? ", 0).Delete(&Tag{}).Error; err != nil {
 		return false, err
 	}
 

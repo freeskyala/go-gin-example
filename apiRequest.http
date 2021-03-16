@@ -1,4 +1,4 @@
-GET http://127.0.0.1:8011/api/demoTest?funcName=log
+GET http://127.0.0.1:8011/api/demoTest?funcName=redis
 Accept: application/json
 ##  elastic test tagmodel redis log
 

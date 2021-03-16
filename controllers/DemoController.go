@@ -3,7 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/EDDYCJY/go-gin-example/models"
+	"github.com/EDDYCJY/go-gin-example/pkg/elasticClient"
 	lib "github.com/EDDYCJY/go-gin-example/pkg/librarys"
+	"github.com/EDDYCJY/go-gin-example/pkg/redisClient"
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,7 +44,7 @@ func DemoTest(c *gin.Context) {
 		return
 	}
 	if funcName == "elastic"{
-		esClient := new(lib.EsClientHandler)
+		esClient := new(elasticClient.EsClientHandler)
 		updateMap := make(map[string]interface{})
 		updateMap["challenge_item"] = 90
 		esClient.EsClientUpdateById("90856","vaffle-posts","posts",updateMap)
@@ -66,7 +68,7 @@ func DemoTest(c *gin.Context) {
 	}
 
 	if funcName == "redis"{
-		redisClient := new(lib.RedisClientHandler)
+		redisClient := new(redisClient.RedisClientHandler)
 		stringCache,_:= json.Marshal(scoreMap)
 		redisClient.RedisSelect(1).RedisSet("goin3",stringCache)
 		cache := redisClient.RedisSelect(1).RedisGet("goin3")

@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/EDDYCJY/go-gin-example/controllers"
+	"github.com/EDDYCJY/go-gin-example/pkg/initElasitc"
+	"github.com/EDDYCJY/go-gin-example/pkg/initMysql"
+	"github.com/EDDYCJY/go-gin-example/pkg/initRedis"
 	"github.com/EDDYCJY/go-gin-example/pkg/initconfig"
-	"github.com/EDDYCJY/go-gin-example/pkg/initstart"
 	"github.com/EDDYCJY/go-gin-example/pkg/librarys"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -14,10 +16,13 @@ import (
 func init() {
 	//setting.Setup()
 	initconfig.InitConfig()
-	initstart.InitMysqlTestDb()
-	new(initstart.RedisPool).InitRedisDb()
-	new(initstart.ElasticSearch).InitDefaultEs()
+	initMysql.InitMysqlTestDb()
+	new(initRedis.RedisPool).InitRedisDb()
+	new(initElasitc.ElasticSearch).InitDefaultEs()
+	//new(initstart.CronTask).InitCrond()
 	librarys.InitLog()
+	//tagService := logic.Crond{}
+	//tagService.CrondTest()
 }
 
 // @title Golang Gin API test
@@ -46,18 +51,20 @@ func main() {
 	log.Printf("[info] start http server listening %s", endPoint)
 
 	server.ListenAndServe()
-
+/*
 	// If you want Graceful Restart, you need a Unix system and download github.com/fvbock/endless
-	//endless.DefaultReadTimeOut = readTimeout
-	//endless.DefaultWriteTimeOut = writeTimeout
-	//endless.DefaultMaxHeaderBytes = maxHeaderBytes
-	//server := endless.NewServer(endPoint, routersInit)
-	//server.BeforeBegin = func(add string) {
-	//	log.Printf("Actual pid is %d", syscall.Getpid())
-	//}
+	endless.DefaultReadTimeOut = readTimeout
+	endless.DefaultWriteTimeOut = writeTimeout
+	endless.DefaultMaxHeaderBytes = maxHeaderBytes
+	server1 := endless.NewServer(endPoint, routersInit)
+	server1.BeforeBegin = func(add string) {
+		log.Printf("Actual pid is %d", syscall.Getpid())
+	}
 	//
-	//err := server.ListenAndServe()
-	//if err != nil {
-	//	log.Printf("Server err: %v", err)
-	//}
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Printf("Server err: %v", err)
+	}
+
+ */
 }

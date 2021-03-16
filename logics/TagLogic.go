@@ -1,4 +1,4 @@
-package TagLogic
+package logics
 
 import (
 	"github.com/EDDYCJY/go-gin-example/models"

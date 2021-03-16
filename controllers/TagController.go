@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/EDDYCJY/go-gin-example/logics"
+	logics "github.com/EDDYCJY/go-gin-example/logics"
 	lib "github.com/EDDYCJY/go-gin-example/pkg/librarys"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
@@ -24,7 +24,7 @@ func TagIndex(c *gin.Context) {
 		state = com.StrTo(arg).MustInt()
 	}
 
-	tagService := TagLogic.Tag{
+	tagService := logics.Tag{
 		Name:     name,
 		State:    state,
 	}
